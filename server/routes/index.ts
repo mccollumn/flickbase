@@ -1,14 +1,14 @@
 import express from "express";
 const authRoute = require("./auth.route");
 const userRoute = require("./user.route");
-const articleRoute = require("./article.route");
+const articlesRoute = require("./articles.route");
 
 const router = express.Router();
 
 const routesIndex = [
   { path: "/auth", route: authRoute },
   { path: "/users", route: userRoute },
-  { path: "/articles", route: articleRoute },
+  { path: "/articles", route: articlesRoute },
 ];
 
 routesIndex.forEach((route) => {
