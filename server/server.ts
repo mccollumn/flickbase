@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const routes = require("./routes");
 require("dotenv").config();
 
 const app = express();
@@ -11,6 +12,7 @@ const mongoUri =
 mongoose.connect(mongoUri);
 
 app.use(bodyParser.json());
+app.use("/api", routes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
