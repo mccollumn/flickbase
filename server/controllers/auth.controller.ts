@@ -19,6 +19,19 @@ const authController = {
       res.status(status.BAD_REQUEST).send(error.message);
     }
   },
+  async signin(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+      const user = await authService.signInWithEmailAndPassword(
+        email,
+        password
+      );
+      const token = await authService.genAuthToken(user);
+      res.cookie("x-access-token", token).send({ user, token });
+    } catch (error: any) {
+      res.status(status.BAD_REQUEST).send(error.message);
+    }
+  },
 };
 
 module.exports = authController;

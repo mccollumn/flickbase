@@ -1,10 +1,27 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document, Model } from "mongoose";
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const userSchema = new mongoose.Schema({
+interface IUser extends Document {
+  email: string;
+  password: string;
+  role: string;
+  firstname: string;
+  lastname: string;
+  age: number;
+  date: Date;
+  verified: boolean;
+}
+
+interface IUserModel extends Model<IUser> {
+  emailTaken(email: string): Promise<boolean>;
+  generateAuthToken(): string;
+  comparePassword(candidatePassword: string): Promise<boolean>;
+}
+
+const userSchema: Schema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -75,6 +92,15 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const User = mongoose.model("User", userSchema);
+userSchema.methods.comparePassword = async function (
+  candidatePassword: string
+) {
+  const user = this;
+  const match = await bcrypt.compare(candidatePassword, user.password);
+  return match;
+};
 
-module.exports = User;
+export const User: IUserModel = mongoose.model<IUser, IUserModel>(
+  "User",
+  userSchema
+);
