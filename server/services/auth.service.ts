@@ -1,10 +1,12 @@
 import { User } from "../models/user";
 const userService = require("./user.service");
+const { status } = require("http-status");
+const { APIError } = require("../middleware/apiError");
 
 const createUser = async (email: string, password: string) => {
   try {
     if (await User.emailTaken(email)) {
-      throw new Error("Email already taken");
+      throw new APIError(status.BAD_REQUEST, "Email already taken");
     }
     const user = new User({ email, password });
     await user.save();
@@ -23,10 +25,10 @@ const signInWithEmailAndPassword = async (email: string, password: string) => {
   try {
     const user = await userService.findUserByEmail(email);
     if (!user) {
-      throw new Error("User not found");
+      throw new APIError(status.BAD_REQUEST, "User not found");
     }
     if (!(await user.comparePassword(password))) {
-      throw new Error("Invalid password");
+      throw new APIError(status.BAD_REQUEST, "Invalid password");
     }
     return user;
   } catch (error) {
