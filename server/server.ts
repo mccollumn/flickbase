@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const routes = require("./routes");
 const { xss } = require("express-xss-sanitizer");
 const mongoSanitize = require("express-mongo-sanitize");
+const { handleError, convertToAPIError } = require("./middleware/apiError");
 require("dotenv").config();
 
 const app = express();
@@ -13,10 +14,23 @@ const mongoUri =
   process.env.MONGODB_URI || "mongodb://localhost:27017/express-mongo";
 mongoose.connect(mongoUri);
 
+// Middleware
 app.use(bodyParser.json());
+
+// Routes
 app.use("/api", routes);
+
+// Sanitize
 app.use(xss());
 app.use(mongoSanitize());
+
+// Error handling middleware
+app.use(convertToAPIError);
+app.use(
+  (err: Error, req: Express.Request, res: Express.Response, next: any) => {
+    handleError(err, res);
+  }
+);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
