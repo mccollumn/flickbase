@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 const { status } = require("http-status");
 const { authService } = require("../services");
+import { IUserRequest } from "../models/user";
 
 const authController = {
   async register(req: Request, res: Response, next: any) {
@@ -31,6 +32,9 @@ const authController = {
     } catch (error: any) {
       next(error);
     }
+  },
+  async isAuth(req: IUserRequest, res: Response, next: any) {
+    res.json(req.user);
   },
 };
 

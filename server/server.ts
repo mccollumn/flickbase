@@ -5,10 +5,13 @@ const routes = require("./routes");
 const { xss } = require("express-xss-sanitizer");
 const mongoSanitize = require("express-mongo-sanitize");
 const { handleError, convertToAPIError } = require("./middleware/apiError");
+const { jwtStrategy } = require("./middleware/passport");
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+const passport = require("passport");
 
 const mongoUri =
   process.env.MONGODB_URI || "mongodb://localhost:27017/express-mongo";
@@ -23,6 +26,10 @@ app.use("/api", routes);
 // Sanitize
 app.use(xss());
 app.use(mongoSanitize());
+
+// Passport
+app.use(passport.initialize());
+passport.use("jwt", jwtStrategy);
 
 // Error handling middleware
 app.use(convertToAPIError);
