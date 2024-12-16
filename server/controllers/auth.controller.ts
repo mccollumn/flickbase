@@ -36,6 +36,9 @@ const authController = {
   async isAuth(req: IUserRequest, res: Response, next: any) {
     res.json(req.user);
   },
+  // async testRole(req: IUserRequest, res: Response, next: any) {
+  //   res.json(req.user);
+  // },
 };
 
 module.exports = authController;

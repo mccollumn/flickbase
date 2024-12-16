@@ -4,15 +4,16 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-export interface IUser extends Document {
-  email: string;
-  password: string;
-  role: string;
-  firstname: string;
-  lastname: string;
-  age: number;
-  date: Date;
-  verified: boolean;
+export interface IUser {
+  _id: unknown;
+  email?: string;
+  password?: string;
+  role?: string;
+  firstname?: string;
+  lastname?: string;
+  age?: number;
+  date?: Date;
+  verified?: boolean;
 }
 
 export interface IUserRequest extends Request {
