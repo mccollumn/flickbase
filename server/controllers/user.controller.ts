@@ -11,7 +11,7 @@ const userController = {
       if (!user) {
         throw new APIError(status.NOT_FOUND, "User not found");
       }
-      res.json(user);
+      res.json(res.locals.permission.filter(user._doc));
     } catch (error) {
       next(error);
     }
