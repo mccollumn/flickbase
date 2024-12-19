@@ -16,6 +16,14 @@ const userController = {
       next(error);
     }
   },
+  async updateProfile(req: IUserRequest, res: Response, next: any) {
+    try {
+      const user = await userService.updateUserProfile(req);
+      res.json(res.locals.permission.filter(user._doc));
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = userController;
