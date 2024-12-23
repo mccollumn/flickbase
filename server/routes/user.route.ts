@@ -8,4 +8,10 @@ userRouter
   .get(auth("readOwn", "profile"), userController.profile)
   .patch(auth("updateOwn", "profile"), userController.updateProfile);
 
+userRouter.patch(
+  "/email",
+  auth("updateOwn", "profile"),
+  userController.updateEmail
+);
+
 module.exports = userRouter;

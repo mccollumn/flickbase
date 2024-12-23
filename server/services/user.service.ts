@@ -32,8 +32,33 @@ const updateUserProfile = async (req: any) => {
   }
 };
 
+const updateUserEmail = async (req: any) => {
+  try {
+    if (await User.emailTaken(req.body.newemail)) {
+      throw new APIError(status.CONFLICT, "Email already taken");
+    }
+    const user = await User.findOneAndUpdate(
+      { _id: req.user._id, email: req.user.email },
+      {
+        $set: {
+          email: req.body.newemail,
+          verified: false,
+        },
+      },
+      { new: true }
+    );
+    if (!user) {
+      throw new APIError(status.NOT_FOUND, "User not found");
+    }
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   findUserByEmail,
   findUserById,
   updateUserProfile,
+  updateUserEmail,
 };
