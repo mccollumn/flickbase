@@ -2,7 +2,7 @@ import { Response } from "express";
 import { IUserRequest } from "../models/user";
 const { status } = require("http-status");
 const { APIError } = require("../middleware/apiError");
-const { userService, authService } = require("../services");
+const { userService, authService, emailService } = require("../services");
 
 const userController = {
   async profile(req: IUserRequest, res: Response, next: any) {
@@ -28,6 +28,10 @@ const userController = {
     try {
       const user = await userService.updateUserEmail(req);
       const token = await authService.genAuthToken(user);
+
+      // Send email
+      await emailService.registerEmail(user.email, user);
+
       res
         .cookie("x-access-token", token)
         .send({ user: res.locals.permission.filter(user._doc), token });

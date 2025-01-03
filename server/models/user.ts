@@ -97,6 +97,15 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
+userSchema.methods.generateEmailVerificationToken = function () {
+  const user = this;
+  const userObj = { sub: user._id.toHexString() };
+  const token = jwt.sign(userObj, process.env.JWT_SECRET, {
+    expiresIn: "10h",
+  });
+  return token;
+};
+
 userSchema.methods.comparePassword = async function (
   candidatePassword: string
 ) {

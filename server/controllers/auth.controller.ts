@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 const { status } = require("http-status");
-const { authService } = require("../services");
+const { authService, emailService } = require("../services");
 import { IUserRequest } from "../models/user";
 
 const authController = {
@@ -11,6 +11,7 @@ const authController = {
       const token = await authService.genAuthToken(user);
 
       // Send verification email
+      await emailService.registerEmail(email, user);
 
       res
         .cookie("x-access-token", token)
