@@ -16,8 +16,13 @@ export interface IUser {
   verified?: boolean;
 }
 
+interface IUserQuery {
+  validation: string;
+}
+
 export interface IUserRequest extends Request {
   user: IUser;
+  query: IUserQuery;
 }
 
 interface IUserModel extends Model<IUser> {
@@ -93,6 +98,15 @@ userSchema.methods.generateAuthToken = function () {
   const userObj = { sub: user._id.toHexString(), email: user.email };
   const token = jwt.sign(userObj, process.env.JWT_SECRET, {
     expiresIn: "1d",
+  });
+  return token;
+};
+
+userSchema.methods.generateEmailVerificationToken = function () {
+  const user = this;
+  const userObj = { sub: user._id.toHexString() };
+  const token = jwt.sign(userObj, process.env.JWT_SECRET, {
+    expiresIn: "10h",
   });
   return token;
 };
