@@ -39,6 +39,25 @@ const userController = {
       next(error);
     }
   },
+  async verifyAccount(req: IUserRequest, res: Response, next: any) {
+    try {
+      const token = userService.validateToken(req.query.validation);
+      const user = await userService.findUserById(token.sub);
+
+      if (!user) {
+        throw new APIError(status.NOT_FOUND, "User not found");
+      }
+      if (user.verified) {
+        throw new APIError(status.BAD_REQUEST, "Account already verified");
+      }
+
+      user.verified = true;
+      await user.save();
+      res.status(status.CREATED).send({ email: user.email, verified: true });
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = userController;

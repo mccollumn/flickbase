@@ -16,8 +16,13 @@ export interface IUser {
   verified?: boolean;
 }
 
+interface IUserQuery {
+  validation: string;
+}
+
 export interface IUserRequest extends Request {
   user: IUser;
+  query: IUserQuery;
 }
 
 interface IUserModel extends Model<IUser> {
