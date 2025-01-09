@@ -11,6 +11,7 @@ const grantsObject = {
   admin: {
     // test: allRights,
     profile: allRights,
+    categories: allRights,
   },
   user: {
     // test: {
