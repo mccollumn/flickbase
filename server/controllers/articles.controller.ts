@@ -6,6 +6,7 @@ const articlesController = {
   async createCategory(req: Request, res: Response, next: any) {
     try {
       const category = await articlesService.addCategory(req.body);
+      res.json(category);
     } catch (error) {
       next(error);
     }
