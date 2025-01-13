@@ -11,6 +11,14 @@ const articlesController = {
       next(error);
     }
   },
+  async getCategories(req: Request, res: Response, next: any) {
+    try {
+      const categories = await articlesService.findAllCategories();
+      res.json(categories);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = articlesController;

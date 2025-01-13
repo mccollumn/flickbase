@@ -6,6 +6,7 @@ const articlesRouter = express.Router();
 // Categories
 articlesRouter
   .route("/categories")
-  .post(auth("createAny", "categories"), articlesController.createCategory);
+  .post(auth("createAny", "categories"), articlesController.createCategory)
+  .get(auth("readAny", "categories"), articlesController.getCategories);
 
 module.exports = articlesRouter;
