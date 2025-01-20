@@ -1,5 +1,28 @@
 const { Category } = require("../models/category");
+const { Article } = require("../models/article");
 const { APIError } = require("../middleware/apiError");
+
+type ArticleBody = Body & {
+  title: string;
+  content: string;
+  excerpt: string;
+  score: number;
+  director: string;
+  actors: string[];
+  status: string;
+  category: string;
+  date: Date;
+};
+
+const addArticle = async (body: ArticleBody) => {
+  try {
+    const article = new Article({ ...body, score: body.score });
+    await article.save();
+    return article;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const addCategory = async (body: Body) => {
   try {
@@ -21,6 +44,7 @@ const findAllCategories = async () => {
 };
 
 module.exports = {
+  addArticle,
   addCategory,
   findAllCategories,
 };

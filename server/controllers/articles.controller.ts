@@ -3,6 +3,14 @@ const { status } = require("http-status");
 const { articlesService } = require("../services");
 
 const articlesController = {
+  async createArticle(req: Request, res: Response, next: any) {
+    try {
+      const article = await articlesService.addArticle(req.body);
+      res.json(article);
+    } catch (error) {
+      next(error);
+    }
+  },
   async createCategory(req: Request, res: Response, next: any) {
     try {
       const category = await articlesService.addCategory(req.body);

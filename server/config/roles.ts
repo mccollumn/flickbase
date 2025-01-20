@@ -12,6 +12,7 @@ const grantsObject = {
     // test: allRights,
     profile: allRights,
     categories: allRights,
+    articles: allRights,
   },
   user: {
     // test: {
@@ -20,6 +21,9 @@ const grantsObject = {
     profile: {
       "read:own": ["*", "!password", "!_id"],
       "update:own": ["*", "!password", "!_id"],
+    },
+    articles: {
+      "read:any": ["*"],
     },
   },
 };
