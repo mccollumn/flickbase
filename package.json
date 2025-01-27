@@ -20,6 +20,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "express-mongo-sanitize": "^2.2.0",
+    "express-validator": "^7.2.1",
     "express-xss-sanitizer": "^1.2.1",
     "http-status": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
