@@ -11,6 +11,10 @@ articlesRouter.post(
   articlesController.createArticle
 );
 
+articlesRouter
+  .route("/article/:id")
+  .get(auth("readAny", "articles"), articlesController.getArticleById);
+
 // Categories
 articlesRouter
   .route("/categories")

@@ -1,11 +1,21 @@
 import { Request, Response } from "express";
 const { status } = require("http-status");
 const { articlesService } = require("../services");
+import { IUserRequest } from "../models/user";
 
 const articlesController = {
   async createArticle(req: Request, res: Response, next: any) {
     try {
       const article = await articlesService.addArticle(req.body);
+      res.json(article);
+    } catch (error) {
+      next(error);
+    }
+  },
+  async getArticleById(req: IUserRequest, res: Response, next: any) {
+    try {
+      const _id = req.params.id;
+      const article = await articlesService.getArticleById(_id, req.user);
       res.json(article);
     } catch (error) {
       next(error);

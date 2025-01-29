@@ -23,6 +23,9 @@ interface IUserQuery {
 export interface IUserRequest extends Request {
   user: IUser;
   query: IUserQuery;
+  params: {
+    id: string;
+  };
 }
 
 interface IUserModel extends Model<IUser> {

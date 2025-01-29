@@ -1,6 +1,7 @@
 const { Category } = require("../models/category");
 const { Article } = require("../models/article");
 const { APIError } = require("../middleware/apiError");
+import { IUser } from "../models/user";
 
 type ArticleBody = Body & {
   title: string;
@@ -18,6 +19,21 @@ const addArticle = async (body: ArticleBody) => {
   try {
     const article = new Article({ ...body, score: body.score });
     await article.save();
+    return article;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getArticleById = async (id: string, user: IUser) => {
+  try {
+    if (user.role === "user") {
+      throw new APIError(403, "Forbidden");
+    }
+    const article = await Article.findById(id).populate("category");
+    if (!article) {
+      throw new APIError(404, "Article not found");
+    }
     return article;
   } catch (error) {
     throw error;
@@ -45,6 +61,7 @@ const findAllCategories = async () => {
 
 module.exports = {
   addArticle,
+  getArticleById,
   addCategory,
   findAllCategories,
 };
