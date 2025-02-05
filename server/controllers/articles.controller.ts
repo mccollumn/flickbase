@@ -30,6 +30,15 @@ const articlesController = {
       next(error);
     }
   },
+  async deleteArticleById(req: IUserRequest, res: Response, next: any) {
+    try {
+      const _id = req.params.id;
+      await articlesService.deleteArticleById(_id);
+      res.status(status.OK).json({ message: "Article deleted" });
+    } catch (error) {
+      next(error);
+    }
+  },
   async createCategory(req: Request, res: Response, next: any) {
     try {
       const category = await articlesService.addCategory(req.body);

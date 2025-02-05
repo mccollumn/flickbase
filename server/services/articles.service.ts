@@ -42,14 +42,23 @@ const getArticleById = async (id: string, user: IUser) => {
 
 const updateArticleById = async (_id: string, body: ArticleBody) => {
   try {
-    console.log(body);
-    console.log(_id);
     const article = await Article.findOneAndUpdate(
       { _id },
       { $set: body },
       { new: true }
     ).populate("category");
-    console.log(article);
+    if (!article) {
+      throw new APIError(404, "Article not found");
+    }
+    return article;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteArticleById = async (_id: string) => {
+  try {
+    const article = await Article.findByIdAndDelete(_id);
     if (!article) {
       throw new APIError(404, "Article not found");
     }
@@ -82,6 +91,7 @@ module.exports = {
   addArticle,
   getArticleById,
   updateArticleById,
+  deleteArticleById,
   addCategory,
   findAllCategories,
 };

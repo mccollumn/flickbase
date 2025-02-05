@@ -14,7 +14,8 @@ articlesRouter.post(
 articlesRouter
   .route("/article/:id")
   .get(auth("readAny", "articles"), articlesController.getArticleById)
-  .patch(auth("updateAny", "articles"), articlesController.updateArticleById);
+  .patch(auth("updateAny", "articles"), articlesController.updateArticleById)
+  .delete(auth("deleteAny", "articles"), articlesController.deleteArticleById);
 
 // Categories
 articlesRouter
