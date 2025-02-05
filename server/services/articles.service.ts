@@ -40,6 +40,25 @@ const getArticleById = async (id: string, user: IUser) => {
   }
 };
 
+const updateArticleById = async (_id: string, body: ArticleBody) => {
+  try {
+    console.log(body);
+    console.log(_id);
+    const article = await Article.findOneAndUpdate(
+      { _id },
+      { $set: body },
+      { new: true }
+    ).populate("category");
+    console.log(article);
+    if (!article) {
+      throw new APIError(404, "Article not found");
+    }
+    return article;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const addCategory = async (body: Body) => {
   try {
     const category = new Category({ ...body });
@@ -62,6 +81,7 @@ const findAllCategories = async () => {
 module.exports = {
   addArticle,
   getArticleById,
+  updateArticleById,
   addCategory,
   findAllCategories,
 };

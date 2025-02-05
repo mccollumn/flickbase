@@ -13,7 +13,8 @@ articlesRouter.post(
 
 articlesRouter
   .route("/article/:id")
-  .get(auth("readAny", "articles"), articlesController.getArticleById);
+  .get(auth("readAny", "articles"), articlesController.getArticleById)
+  .patch(auth("updateAny", "articles"), articlesController.updateArticleById);
 
 // Categories
 articlesRouter
