@@ -17,6 +17,10 @@ articlesRouter
   .patch(auth("updateAny", "articles"), articlesController.updateArticleById)
   .delete(auth("deleteAny", "articles"), articlesController.deleteArticleById);
 
+articlesRouter
+  .route("/users/article/:id")
+  .get(articlesController.getUsersArticleById);
+
 // Categories
 articlesRouter
   .route("/categories")

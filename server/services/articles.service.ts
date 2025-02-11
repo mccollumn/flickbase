@@ -68,6 +68,21 @@ const deleteArticleById = async (_id: string) => {
   }
 };
 
+const getUsersArticleById = async (_id: string) => {
+  try {
+    const article = await Article.findById(_id).populate("category");
+    if (!article) {
+      throw new APIError(404, "Article not found");
+    }
+    if (article.status !== "published") {
+      throw new APIError(403, "Forbidden");
+    }
+    return article;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const addCategory = async (body: Body) => {
   try {
     const category = new Category({ ...body });
@@ -92,6 +107,7 @@ module.exports = {
   getArticleById,
   updateArticleById,
   deleteArticleById,
+  getUsersArticleById,
   addCategory,
   findAllCategories,
 };
