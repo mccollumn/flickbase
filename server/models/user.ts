@@ -18,6 +18,9 @@ export interface IUser {
 
 interface IUserQuery {
   validation: string;
+  sortby?: string;
+  order?: string;
+  limit?: string;
 }
 
 export interface IUserRequest extends Request {

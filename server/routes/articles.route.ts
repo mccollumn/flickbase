@@ -21,6 +21,8 @@ articlesRouter
   .route("/users/article/:id")
   .get(articlesController.getUsersArticleById);
 
+articlesRouter.route("/all").get(articlesController.getAllArticles);
+
 // Categories
 articlesRouter
   .route("/categories")

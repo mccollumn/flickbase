@@ -1,7 +1,7 @@
 const { Category } = require("../models/category");
 const { Article } = require("../models/article");
 const { APIError } = require("../middleware/apiError");
-import { IUser } from "../models/user";
+import { IUser, IUserRequest } from "../models/user";
 
 type ArticleBody = Body & {
   title: string;
@@ -83,6 +83,22 @@ const getUsersArticleById = async (_id: string) => {
   }
 };
 
+const allArticles = async (req: IUserRequest) => {
+  const sortby = req.query.sortby || "_id";
+  const order = req.query.order || "desc";
+  const limit = req.query.limit || 2;
+
+  try {
+    const articles = await Article.find({ status: "published" })
+      .populate("category")
+      .sort([[sortby, order]])
+      .limit(limit);
+    return articles;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const addCategory = async (body: Body) => {
   try {
     const category = new Category({ ...body });
@@ -108,6 +124,7 @@ module.exports = {
   updateArticleById,
   deleteArticleById,
   getUsersArticleById,
+  allArticles,
   addCategory,
   findAllCategories,
 };
