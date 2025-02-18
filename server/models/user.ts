@@ -23,9 +23,18 @@ interface IUserQuery {
   limit?: string;
 }
 
+interface IUserBody extends Body, ReadableStream<Uint8Array> {
+  validation: string;
+  sortby?: string;
+  order?: string;
+  limit?: string;
+  skip?: string;
+}
+
 export interface IUserRequest extends Request {
   user: IUser;
   query: IUserQuery;
+  body: IUserBody;
   params: {
     id: string;
   };
