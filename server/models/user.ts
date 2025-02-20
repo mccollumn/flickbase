@@ -29,6 +29,8 @@ interface IUserBody extends Body, ReadableStream<Uint8Array> {
   order?: string;
   limit?: string;
   skip?: string;
+  page?: string;
+  keyword?: string;
 }
 
 export interface IUserRequest extends Request {

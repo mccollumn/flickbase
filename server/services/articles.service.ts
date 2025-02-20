@@ -117,6 +117,45 @@ const moreArticles = async (req: IUserRequest) => {
   }
 };
 
+const paginateAdminArticles = async (req: IUserRequest) => {
+  try {
+    let aggQueryArray = [];
+    if (req.body.keyword && req.body.keyword !== "") {
+      const re = new RegExp(`${req.body.keyword}`, "gi");
+      aggQueryArray.push({
+        $match: {
+          title: { $regex: re },
+        },
+      });
+    }
+
+    // Categories
+    aggQueryArray.push(
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      { $unwind: "$category" }
+    );
+
+    const aggQuery = Article.aggregate(aggQueryArray);
+    const limit = req.body.limit || 5;
+    const options = {
+      page: req.body.page || 1,
+      limit: limit,
+      sort: { _id: "desc" },
+    };
+    const articles = await Article.aggregatePaginate(aggQuery, options);
+    return articles;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const addCategory = async (body: Body) => {
   try {
     const category = new Category({ ...body });
@@ -144,6 +183,7 @@ module.exports = {
   getUsersArticleById,
   allArticles,
   moreArticles,
+  paginateAdminArticles,
   addCategory,
   findAllCategories,
 };

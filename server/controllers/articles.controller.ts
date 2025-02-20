@@ -64,6 +64,14 @@ const articlesController = {
       next(error);
     }
   },
+  async adminPaginate(req: IUserRequest, res: Response, next: any) {
+    try {
+      const articles = await articlesService.paginateAdminArticles(req);
+      res.json(articles);
+    } catch (error) {
+      next(error);
+    }
+  },
   async createCategory(req: Request, res: Response, next: any) {
     try {
       const category = await articlesService.addCategory(req.body);

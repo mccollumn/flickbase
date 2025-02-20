@@ -26,6 +26,12 @@ articlesRouter
   .get(articlesController.getAllArticles)
   .post(articlesController.getMoreArticles);
 
+articlesRouter.post(
+  "/admin/paginate",
+  auth("readAny", "articles"),
+  articlesController.adminPaginate
+);
+
 // Categories
 articlesRouter
   .route("/categories")
