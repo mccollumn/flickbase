@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Loader } from "../../utils/tools";
+import { Loader, errorHelper } from "../../utils/tools";
 
 type HandleSubmitProps = { email: string; password: string };
 
@@ -53,7 +53,40 @@ const Auth = () => {
             component="form"
             onSubmit={formik.handleSubmit}
           >
-            form
+            <TextField
+              name="email"
+              label="Enter your email"
+              variant="outlined"
+              {...formik.getFieldProps("email")}
+              {...errorHelper(formik, "email")}
+            />
+            <TextField
+              name="password"
+              label="Enter your password"
+              variant="outlined"
+              type="password"
+              {...formik.getFieldProps("password")}
+              {...errorHelper(formik, "password")}
+            />
+            <div className="mt-2">
+              <Button
+                variant="contained"
+                color="primary"
+                type="submit"
+                size="large"
+              >
+                {register ? "Register" : "Login"}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outlined"
+                color="secondary"
+                size="small"
+                onClick={() => setRegister(!register)}
+              >
+                Want to {!register ? "Register" : "Login"}
+              </Button>
+            </div>
           </Box>
         )}
       </div>
