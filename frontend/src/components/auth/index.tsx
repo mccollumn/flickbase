@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "../../store";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { registerUser } from "../../store/actions/users";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -33,7 +34,7 @@ const Auth = () => {
 
   const handleSubmit = (values: HandleSubmitProps) => {
     if (register) {
-      dispatch({ type: "REGISTER", payload: values });
+      dispatch(registerUser(values));
     } else {
       dispatch({ type: "LOGIN", payload: values });
     }
