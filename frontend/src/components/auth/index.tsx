@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "../../store";
+import { useDispatch, useSelector, RootState } from "../../store";
 import { useNavigate } from "react-router-dom";
 import { registerUser, signInUser } from "../../store/actions/users";
 import Box from "@mui/material/Box";
@@ -14,8 +14,8 @@ type HandleSubmitProps = { email: string; password: string };
 const Auth = () => {
   const [register, setRegister] = useState(false);
   const navigate = useNavigate();
-  const users = useSelector((state: any) => state.users);
-  const notifications = useSelector((state: any) => state.notifications);
+  const users = useSelector((state: RootState) => state.users);
+  const notifications = useSelector((state: RootState) => state.notifications);
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -55,14 +55,12 @@ const Auth = () => {
             onSubmit={formik.handleSubmit}
           >
             <TextField
-              name="email"
               label="Enter your email"
               variant="outlined"
               {...formik.getFieldProps("email")}
               {...errorHelper(formik, "email")}
             />
             <TextField
-              name="password"
               label="Enter your password"
               variant="outlined"
               type="password"
