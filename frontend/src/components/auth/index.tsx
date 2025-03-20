@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector, RootState } from "../../store";
@@ -39,6 +39,12 @@ const Auth = () => {
       dispatch(signInUser(values));
     }
   };
+
+  useEffect(() => {
+    if (notifications && notifications.global.success) {
+      navigate("/dashboard");
+    }
+  }, [navigate, notifications]);
 
   return (
     <>

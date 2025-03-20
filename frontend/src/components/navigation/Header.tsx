@@ -4,6 +4,7 @@ import SideDrawer from "./SideNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { clearNotifications } from "../../store/reducers/notifications";
 import { RootState } from "../../store";
+import { showToast } from "../../utils/tools";
 
 const Header = () => {
   const notifications = useSelector((state: RootState) => state.notifications);
@@ -13,12 +14,12 @@ const Header = () => {
     const { global } = notifications;
     if (notifications && global.error) {
       const msg = global.msg ? global.msg : "An unexpected error occurred";
-      console.log(msg);
+      showToast("ERROR", msg);
       dispatch(clearNotifications());
     }
     if (notifications && global.success) {
       const msg = global.msg ? global.msg : "Success";
-      console.log(msg);
+      showToast("SUCCESS", msg);
       dispatch(clearNotifications());
     }
   }, [dispatch, notifications]);
