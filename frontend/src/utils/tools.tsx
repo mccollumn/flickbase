@@ -1,6 +1,7 @@
 import CircularProgress from "@mui/material/CircularProgress";
 import { FormikErrors, FormikTouched } from "formik";
 import { toast } from "react-toastify";
+import cookie from "react-cookies";
 
 interface Formik {
   errors: FormikErrors<{ [key: string]: string }>;
@@ -32,4 +33,20 @@ export const showToast = (msg: string, type: string) => {
     default:
       return false;
   }
+};
+
+export const getTokenCookie = () => {
+  return cookie.load("x-access-token");
+};
+
+export const removeTokenCookie = () => {
+  cookie.remove("x-access-token", { path: "/" });
+};
+
+export const getAuthHeader = () => {
+  return {
+    headers: {
+      Authorization: `Bearer ${getTokenCookie()}`,
+    },
+  };
 };
