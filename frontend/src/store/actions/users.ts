@@ -55,7 +55,7 @@ export const signInUser = createAsyncThunk(
   }
 );
 
-export const osAuth = createAsyncThunk("users/isAuth", async () => {
+export const isAuth = createAsyncThunk("users/isAuth", async () => {
   try {
     const request = await axios.get("/api/auth/isauth", getAuthHeader());
 
