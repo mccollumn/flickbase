@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Loader, errorHelper } from "../../utils/tools";
+import PreventSignin from "../../hoc/PreventSignin";
 
 type HandleSubmitProps = { email: string; password: string };
 
@@ -47,7 +48,7 @@ const Auth = () => {
   }, [navigate, notifications]);
 
   return (
-    <>
+    <PreventSignin users={users}>
       <div className="auth_container">
         <h1>Authenticate</h1>
         {users.loading ? (
@@ -95,7 +96,7 @@ const Auth = () => {
           </Box>
         )}
       </div>
-    </>
+    </PreventSignin>
   );
 };
 

@@ -7,6 +7,7 @@ import { RootState } from "../../store";
 import { showToast } from "../../utils/tools";
 
 const Header = () => {
+  const users = useSelector((state: RootState) => state.users);
   const notifications = useSelector((state: RootState) => state.notifications);
   const dispatch = useDispatch();
 
@@ -33,7 +34,7 @@ const Header = () => {
         >
           Flickbase
         </Link>
-        <SideDrawer />
+        <SideDrawer users={users} />
       </nav>
     </>
   );

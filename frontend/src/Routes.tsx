@@ -4,7 +4,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { AppDispatch } from "./store";
 import { isAuth } from "./store/actions/users";
 import { Loader } from "./utils/tools";
-import MainLayout from "./hoc/mainLayout";
+import MainLayout from "./hoc/MainLayout";
 import Home from "./components/home";
 import Header from "./components/navigation/Header";
 import Auth from "./components/auth";
