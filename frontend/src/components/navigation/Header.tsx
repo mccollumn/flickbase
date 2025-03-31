@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SideDrawer from "./SideNavigation";
 import { useDispatch, useSelector } from "react-redux";
 import { clearNotifications } from "../../store/reducers/notifications";
-import { RootState } from "../../store";
+import { signOut } from "../../store/actions/users";
+import { RootState, AppDispatch } from "../../store";
 import { showToast } from "../../utils/tools";
 
 const Header = () => {
   const users = useSelector((state: RootState) => state.users);
   const notifications = useSelector((state: RootState) => state.notifications);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const { global } = notifications;
@@ -25,6 +27,11 @@ const Header = () => {
     }
   }, [dispatch, notifications]);
 
+  const signOutUser = () => {
+    dispatch(signOut());
+    navigate("/");
+  };
+
   return (
     <>
       <nav className="navbar fixed-top">
@@ -34,7 +41,7 @@ const Header = () => {
         >
           Flickbase
         </Link>
-        <SideDrawer users={users} />
+        <SideDrawer users={users} signOutUser={signOutUser} />
       </nav>
     </>
   );

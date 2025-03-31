@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { errorGlobal, successGlobal } from "../reducers/notifications";
 import axios from "axios";
-import { getAuthHeader } from "../../utils/tools";
+import { getAuthHeader, removeTokenCookie } from "../../utils/tools";
 
 export const registerUser = createAsyncThunk(
   "users/registerUser",
@@ -60,7 +60,12 @@ export const isAuth = createAsyncThunk("users/isAuth", async () => {
     const request = await axios.get("/api/auth/isauth", getAuthHeader());
 
     return { data: request.data, auth: true };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return { data: {}, auth: false };
   }
+});
+
+export const signOut = createAsyncThunk("users/signOut", async () => {
+  removeTokenCookie();
 });

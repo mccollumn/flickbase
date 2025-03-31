@@ -17,7 +17,12 @@ interface Users {
   auth: boolean;
 }
 
-const SideDrawer = ({ users }: { users: Users }) => {
+interface SideDrawwerProps {
+  users: Users;
+  signOutUser: () => void;
+}
+
+const SideDrawer = ({ users, signOutUser }: SideDrawwerProps) => {
   const [state, setState] = useState(false);
 
   return (
@@ -61,7 +66,8 @@ const SideDrawer = ({ users }: { users: Users }) => {
             ) : (
               <ListItemButton
                 onClick={() => {
-                  alert("Sign out");
+                  signOutUser();
+                  setState(false);
                 }}
               >
                 <ListItemIcon>
