@@ -8,6 +8,9 @@ import MainLayout from "./hoc/MainLayout";
 import Home from "./components/home";
 import Header from "./components/navigation/Header";
 import Auth from "./components/auth";
+import Dashboard from "./components/dashboard";
+import DashboardMain from "./components/dashboard/main";
+import AuthGuard from "./hoc/authGuard";
 
 const Router = () => {
   const [loading, setLoading] = useState(true);
@@ -35,6 +38,16 @@ const Router = () => {
           <Header />
           <MainLayout>
             <Routes>
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route
+                  index
+                  element={
+                    <AuthGuard>
+                      <DashboardMain />
+                    </AuthGuard>
+                  }
+                />
+              </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/" element={<Home />} />
             </Routes>
