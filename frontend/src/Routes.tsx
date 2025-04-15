@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { AppDispatch } from "./store";
 import { isAuth } from "./store/actions/users";
-import { Loader } from "./utils/tools";
+import { Loader } from "./utils/components";
 import MainLayout from "./hoc/MainLayout";
 import Home from "./components/home";
 import Header from "./components/navigation/Header";
@@ -21,7 +21,7 @@ const Router = () => {
 
   useEffect(() => {
     dispatch(isAuth());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (users.auth !== null) {

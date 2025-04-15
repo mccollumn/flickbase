@@ -1,4 +1,3 @@
-import CircularProgress from "@mui/material/CircularProgress";
 import { FormikErrors, FormikTouched } from "formik";
 import { toast } from "react-toastify";
 import cookie from "react-cookies";
@@ -15,12 +14,6 @@ export const errorHelper = (formik: Formik, values: string) => ({
       ? formik.errors[values]
       : null,
 });
-
-export const Loader = () => (
-  <div className="root_loader">
-    <CircularProgress />
-  </div>
-);
 
 export const showToast = (msg: string, type: string) => {
   switch (type) {

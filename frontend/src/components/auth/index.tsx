@@ -7,7 +7,8 @@ import { registerUser, signInUser } from "../../store/actions/users";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { Loader, errorHelper } from "../../utils/tools";
+import { Loader } from "../../utils/components";
+import { errorHelper } from "../../utils/tools";
 import PreventSignin from "../../hoc/PreventSignin";
 
 type HandleSubmitProps = { email: string; password: string };
