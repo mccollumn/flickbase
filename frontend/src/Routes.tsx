@@ -10,6 +10,8 @@ import Header from "./components/navigation/Header";
 import Auth from "./components/auth";
 import Dashboard from "./components/dashboard";
 import DashboardMain from "./components/dashboard/main";
+import AdminArticles from "./components/dashboard/articles";
+import AddArticle from "./components/dashboard/articles/edit_add/add";
 import AuthGuard from "./hoc/authGuard";
 
 const Router = () => {
@@ -44,6 +46,22 @@ const Router = () => {
                   element={
                     <AuthGuard>
                       <DashboardMain />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="articles"
+                  element={
+                    <AuthGuard>
+                      <AdminArticles />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="articles/add"
+                  element={
+                    <AuthGuard>
+                      <AddArticle />
                     </AuthGuard>
                   }
                 />
