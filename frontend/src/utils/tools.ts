@@ -1,19 +1,24 @@
-import { FormikErrors, FormikTouched } from "formik";
+import { FormikProps } from "formik";
 import { toast } from "react-toastify";
 import cookie from "react-cookies";
 
-interface Formik {
-  errors: FormikErrors<{ [key: string]: string }>;
-  touched: FormikTouched<{ [key: string]: string }>;
-}
-
-export const errorHelper = (formik: Formik, values: string) => ({
-  error: formik.errors[values] && formik.touched[values] ? true : false,
-  helperText:
-    formik.errors[values] && formik.touched[values]
-      ? formik.errors[values]
-      : null,
-});
+export const errorHelper = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  formik: FormikProps<any>,
+  values: string
+) => {
+  const error = formik.errors[values];
+  const touched = formik.touched[values];
+  return {
+    error: error && touched ? true : false,
+    helperText:
+      error && touched
+        ? typeof error === "string"
+          ? error
+          : "Invalid value"
+        : null,
+  };
+};
 
 export const showToast = (msg: string, type: string) => {
   switch (type) {
