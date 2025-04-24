@@ -1,3 +1,4 @@
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFormik, FieldArray, FormikProvider } from "formik";
@@ -22,6 +23,7 @@ import { errorHelper } from "../../../../utils/tools";
 const AddArticle = () => {
   const articles = useSelector((state: RootState) => state.articles);
   const dispatch = useDispatch();
+  const actorsValue = React.useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -69,7 +71,54 @@ const AddArticle = () => {
             {...errorHelper(formik, "score")}
           />
         </div>
-        <div className="form-group">Actors</div>
+        <div className="form-group">
+          <FormikProvider value={formik}>
+            <FieldArray
+              name="actors"
+              render={(arrayHelpers) => (
+                <div>
+                  <Paper className="actors_form">
+                    <InputBase
+                      className="input"
+                      inputRef={actorsValue}
+                      placeholder="Add an Actor"
+                    />
+                    <IconButton
+                      onClick={() => {
+                        if (
+                          actorsValue.current &&
+                          actorsValue.current?.value !== ""
+                        ) {
+                          arrayHelpers.push(actorsValue.current?.value);
+                          actorsValue.current.value = "";
+                        }
+                      }}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Paper>
+
+                  {formik.errors.actors && formik.touched.actors ? (
+                    <FormHelperText error>
+                      {formik.errors.actors}
+                    </FormHelperText>
+                  ) : null}
+
+                  <div className="chip_container">
+                    {formik.values.actors.map((actor, index) => (
+                      <Chip
+                        key={index}
+                        label={actor}
+                        color="primary"
+                        onDelete={() => arrayHelpers.remove(index)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            />
+          </FormikProvider>
+        </div>
         <div className="form-group">
           <TextField
             style={{ width: "100%" }}
