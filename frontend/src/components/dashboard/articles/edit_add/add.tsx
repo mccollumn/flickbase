@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFormik, FieldArray, FormikProvider } from "formik";
@@ -16,13 +16,17 @@ import FormHelperText from "@mui/material/FormHelperText";
 import InputLabel from "@mui/material/InputLabel";
 import AddIcon from "@mui/icons-material/Add";
 import { formValues, validation } from "./validationSchema";
-import { RootState } from "../../../../store";
+import { AppDispatch, RootState } from "../../../../store";
 import { AdminTitle, Loader } from "../../../../utils/components";
 import { errorHelper } from "../../../../utils/tools";
+import { getCategories } from "../../../../store/actions/articles";
 
 const AddArticle = () => {
-  const articles = useSelector((state: RootState) => state.articles);
-  const dispatch = useDispatch();
+  const articles = useSelector((state: RootState) => state.articles) as {
+    categories: { _id: string; name: string }[];
+    loading: boolean;
+  };
+  const dispatch = useDispatch<AppDispatch>();
   const actorsValue = React.useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -34,6 +38,10 @@ const AddArticle = () => {
       console.log("values", values);
     },
   });
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
 
   return (
     <>
@@ -153,7 +161,32 @@ const AddArticle = () => {
           ) : null}
         </FormControl>
         <Divider className="mt-3 mb-3" />
-        <>Categories</>
+        <>
+          <FormControl fullWidth>
+            <InputLabel>Select a Category</InputLabel>
+            <Select
+              label="Select a Category"
+              {...formik.getFieldProps("category")}
+              error={
+                formik.errors.category && formik.touched.category ? true : false
+              }
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              {articles.categories
+                ? articles.categories.map((category) => (
+                    <MenuItem key={category._id} value={category._id}>
+                      {category.name}
+                    </MenuItem>
+                  ))
+                : null}
+            </Select>
+            {formik.errors.category && formik.touched.category ? (
+              <FormHelperText error>{formik.errors.category}</FormHelperText>
+            ) : null}
+          </FormControl>
+        </>
         <Divider className="mt-3 mb-3" />
         {articles.loading ? (
           <Loader />
