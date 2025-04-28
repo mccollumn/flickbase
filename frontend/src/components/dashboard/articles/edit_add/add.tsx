@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFormik, FieldArray, FormikProvider } from "formik";
+import WYSIWYG from "../../../../utils/forms/tiptap";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -39,6 +40,10 @@ const AddArticle = () => {
     },
   });
 
+  const handleEditorState = (editorState: unknown) => {
+    formik.setFieldValue("content", editorState, true);
+  };
+
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
@@ -56,7 +61,11 @@ const AddArticle = () => {
             {...errorHelper(formik, "title")}
           />
         </div>
-        <div className="form-group">WYSIWYG</div>
+        <div className="form-group">
+          <WYSIWYG
+            setEditorState={(state: unknown) => handleEditorState(state)}
+          />
+        </div>
         <div className="form-group">
           <TextField
             style={{ width: "100%" }}
