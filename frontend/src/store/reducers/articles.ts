@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getCategories } from "../actions/articles";
+import {
+  getCategories,
+  addArticle,
+  ArticleResponse,
+} from "../actions/articles";
 
 export const articlesSlice = createSlice({
   name: "articles",
@@ -14,12 +18,24 @@ export const articlesSlice = createSlice({
     articles: [],
     current: null,
     categories: [],
+    lastAdded: null as ArticleResponse | null,
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getCategories.fulfilled, (state, action) => {
-      state.categories = action.payload;
-    });
+    builder
+      .addCase(addArticle.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addArticle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.lastAdded = action.payload;
+      })
+      .addCase(addArticle.rejected, (state) => {
+        state.loading = false;
+      })
+      .addCase(getCategories.fulfilled, (state, action) => {
+        state.categories = action.payload;
+      });
   },
 });
 

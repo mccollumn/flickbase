@@ -20,7 +20,7 @@ import { formValues, validation } from "./validationSchema";
 import { AppDispatch, RootState } from "../../../../store";
 import { AdminTitle, Loader } from "../../../../utils/components";
 import { errorHelper } from "../../../../utils/tools";
-import { getCategories } from "../../../../store/actions/articles";
+import { getCategories, addArticle } from "../../../../store/actions/articles";
 
 const AddArticle = () => {
   const articles = useSelector((state: RootState) => state.articles) as {
@@ -36,7 +36,13 @@ const AddArticle = () => {
     initialValues: formValues,
     validationSchema: validation,
     onSubmit: (values) => {
-      console.log("values", values);
+      dispatch(addArticle(values))
+        .unwrap()
+        .then((response) => {
+          if (response) {
+            navigate("/dashboard/articles");
+          }
+        });
     },
   });
 
