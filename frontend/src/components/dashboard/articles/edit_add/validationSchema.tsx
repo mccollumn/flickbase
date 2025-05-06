@@ -1,5 +1,16 @@
 import * as Yup from "yup";
 
+export interface FormValueProps {
+  title: string;
+  content: string;
+  excerpt: string;
+  score: string;
+  director: string;
+  actors: string[];
+  status: string;
+  category: string;
+}
+
 export const formValues = {
   title: "",
   content: "",

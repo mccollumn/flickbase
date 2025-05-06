@@ -12,6 +12,7 @@ import Dashboard from "./components/dashboard";
 import DashboardMain from "./components/dashboard/main";
 import AdminArticles from "./components/dashboard/articles";
 import AddArticle from "./components/dashboard/articles/edit_add/add";
+import EditArticle from "./components/dashboard/articles/edit_add/edit";
 import AuthGuard from "./hoc/authGuard";
 
 const Router = () => {
@@ -62,6 +63,14 @@ const Router = () => {
                   element={
                     <AuthGuard>
                       <AddArticle />
+                    </AuthGuard>
+                  }
+                />
+                <Route
+                  path="articles/edit/:articleId"
+                  element={
+                    <AuthGuard>
+                      <EditArticle />
                     </AuthGuard>
                   }
                 />

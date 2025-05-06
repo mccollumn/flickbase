@@ -3,7 +3,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { errorGlobal, successGlobal } from "../reducers/notifications";
 import { getAuthHeader } from "../../utils/tools";
 
-interface ArticlePayload {
+export interface ArticlePayload {
+  _id: string;
   title: string;
   content: string;
   excerpt: string;
@@ -11,7 +12,12 @@ interface ArticlePayload {
   director: string;
   actors: never[];
   status: string;
-  category: string;
+  category:
+    | string
+    | {
+        _id: string;
+        name: string;
+      };
 }
 
 export interface ArticleResponse {
@@ -28,6 +34,23 @@ export const addArticle = createAsyncThunk<ArticleResponse, ArticlePayload>(
         getAuthHeader()
       );
       dispatch(successGlobal("Article added successfully"));
+      return request.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        dispatch(errorGlobal(error.response.data.message));
+      } else {
+        dispatch(errorGlobal("An unknown error occurred"));
+      }
+      throw error;
+    }
+  }
+);
+
+export const getAdminArticle = createAsyncThunk<ArticlePayload, string>(
+  "articles/getAdminArticle",
+  async (_id, { dispatch }) => {
+    try {
+      const request = await axios.get(`/api/articles/${_id}`, getAuthHeader());
       return request.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
