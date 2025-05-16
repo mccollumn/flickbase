@@ -32,7 +32,9 @@ const EditArticle = () => {
   };
   const dispatch = useDispatch<AppDispatch>();
   const actorsValue = React.useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = React.useState(true);
   const [formData, setFormData] = React.useState<FormValueProps>(formValues);
+  const [editorContent, setEditorContent] = React.useState<string | null>(null);
   const { articleId } = useParams();
   const navigate = useNavigate();
 
@@ -67,166 +69,179 @@ const EditArticle = () => {
           }
         }
         setFormData(response as FormValueProps);
+        setEditorContent(response.content);
+        setLoading(false);
       });
   }, [articleId, dispatch]);
 
   return (
     <>
       <AdminTitle title="Edit Article" />
-      <form className="mt-3 article_form" onSubmit={formik.handleSubmit}>
-        <div className="form-group">
-          <TextField
-            style={{ width: "100%" }}
-            label="Enter a Title"
-            variant="outlined"
-            {...formik.getFieldProps("title")}
-            {...errorHelper(formik, "title")}
-          />
-        </div>
-        <div className="form-group">
-          <WYSIWYG
-            setEditorState={(state: unknown) => handleEditorState(state)}
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            style={{ width: "100%" }}
-            label="Enter a Short Description"
-            variant="outlined"
-            multiline
-            rows={4}
-            {...formik.getFieldProps("excerpt")}
-            {...errorHelper(formik, "excerpt")}
-          />
-        </div>
-        <Divider className="mt-3 mb-3" />
-        <div className="form-group">
-          <TextField
-            style={{ width: "100%" }}
-            label="Enter a Score"
-            variant="outlined"
-            type="number"
-            {...formik.getFieldProps("score")}
-            {...errorHelper(formik, "score")}
-          />
-        </div>
-        <div className="form-group">
-          <FormikProvider value={formik}>
-            <FieldArray
-              name="actors"
-              render={(arrayHelpers) => (
-                <div>
-                  <Paper className="actors_form">
-                    <InputBase
-                      className="input"
-                      inputRef={actorsValue}
-                      placeholder="Add an Actor"
-                    />
-                    <IconButton
-                      onClick={() => {
-                        if (
-                          actorsValue.current &&
-                          actorsValue.current?.value !== ""
-                        ) {
-                          arrayHelpers.push(actorsValue.current?.value);
-                          actorsValue.current.value = "";
-                        }
-                      }}
-                    >
-                      <AddIcon />
-                    </IconButton>
-                  </Paper>
-
-                  {formik.errors.actors && formik.touched.actors ? (
-                    <FormHelperText error>
-                      {formik.errors.actors}
-                    </FormHelperText>
-                  ) : null}
-
-                  <div className="chip_container">
-                    {formik.values.actors.map((actor, index) => (
-                      <Chip
-                        key={index}
-                        label={actor}
-                        color="primary"
-                        onDelete={() => arrayHelpers.remove(index)}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
+      {loading ? (
+        <Loader />
+      ) : (
+        <form className="mt-3 article_form" onSubmit={formik.handleSubmit}>
+          <div className="form-group">
+            <TextField
+              style={{ width: "100%" }}
+              label="Enter a Title"
+              variant="outlined"
+              {...formik.getFieldProps("title")}
+              {...errorHelper(formik, "title")}
             />
-          </FormikProvider>
-        </div>
-        <div className="form-group">
-          <TextField
-            style={{ width: "100%" }}
-            label="Enter a Director"
-            variant="outlined"
-            multiline
-            rows={4}
-            {...formik.getFieldProps("director")}
-            {...errorHelper(formik, "director")}
-          />
-        </div>
-        <Divider className="mt-3 mb-3" />
-        <FormControl fullWidth>
-          <InputLabel>Select a Status</InputLabel>
-          <Select
-            label="Select a Status"
-            {...formik.getFieldProps("status")}
-            error={formik.errors.status && formik.touched.status ? true : false}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value="draft">
-              <em>Draft</em>
-            </MenuItem>
-            <MenuItem value="published">
-              <em>Published</em>
-            </MenuItem>
-          </Select>
-          {formik.errors.status && formik.touched.status ? (
-            <FormHelperText error>{formik.errors.status}</FormHelperText>
+          </div>
+          {editorContent ? (
+            <div className="form-group">
+              <WYSIWYG
+                editorContent={editorContent}
+                setEditorState={(state: unknown) => handleEditorState(state)}
+              />
+            </div>
           ) : null}
-        </FormControl>
-        <Divider className="mt-3 mb-3" />
-        <>
+          <div className="form-group">
+            <TextField
+              style={{ width: "100%" }}
+              label="Enter a Short Description"
+              variant="outlined"
+              multiline
+              rows={4}
+              {...formik.getFieldProps("excerpt")}
+              {...errorHelper(formik, "excerpt")}
+            />
+          </div>
+          <Divider className="mt-3 mb-3" />
+          <div className="form-group">
+            <TextField
+              style={{ width: "100%" }}
+              label="Enter a Score"
+              variant="outlined"
+              type="number"
+              {...formik.getFieldProps("score")}
+              {...errorHelper(formik, "score")}
+            />
+          </div>
+          <div className="form-group">
+            <FormikProvider value={formik}>
+              <FieldArray
+                name="actors"
+                render={(arrayHelpers) => (
+                  <div>
+                    <Paper className="actors_form">
+                      <InputBase
+                        className="input"
+                        inputRef={actorsValue}
+                        placeholder="Add an Actor"
+                      />
+                      <IconButton
+                        onClick={() => {
+                          if (
+                            actorsValue.current &&
+                            actorsValue.current?.value !== ""
+                          ) {
+                            arrayHelpers.push(actorsValue.current?.value);
+                            actorsValue.current.value = "";
+                          }
+                        }}
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </Paper>
+
+                    {formik.errors.actors && formik.touched.actors ? (
+                      <FormHelperText error>
+                        {formik.errors.actors}
+                      </FormHelperText>
+                    ) : null}
+
+                    <div className="chip_container">
+                      {formik.values.actors.map((actor, index) => (
+                        <Chip
+                          key={index}
+                          label={actor}
+                          color="primary"
+                          onDelete={() => arrayHelpers.remove(index)}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              />
+            </FormikProvider>
+          </div>
+          <div className="form-group">
+            <TextField
+              style={{ width: "100%" }}
+              label="Enter a Director"
+              variant="outlined"
+              multiline
+              rows={4}
+              {...formik.getFieldProps("director")}
+              {...errorHelper(formik, "director")}
+            />
+          </div>
+          <Divider className="mt-3 mb-3" />
           <FormControl fullWidth>
-            <InputLabel>Select a Category</InputLabel>
+            <InputLabel>Select a Status</InputLabel>
             <Select
-              label="Select a Category"
-              {...formik.getFieldProps("category")}
+              label="Select a Status"
+              {...formik.getFieldProps("status")}
               error={
-                formik.errors.category && formik.touched.category ? true : false
+                formik.errors.status && formik.touched.status ? true : false
               }
             >
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              {articles.categories
-                ? articles.categories.map((category) => (
-                    <MenuItem key={category._id} value={category._id}>
-                      {category.name}
-                    </MenuItem>
-                  ))
-                : null}
+              <MenuItem value="draft">
+                <em>Draft</em>
+              </MenuItem>
+              <MenuItem value="published">
+                <em>Published</em>
+              </MenuItem>
             </Select>
-            {formik.errors.category && formik.touched.category ? (
-              <FormHelperText error>{formik.errors.category}</FormHelperText>
+            {formik.errors.status && formik.touched.status ? (
+              <FormHelperText error>{formik.errors.status}</FormHelperText>
             ) : null}
           </FormControl>
-        </>
-        <Divider className="mt-3 mb-3" />
-        {articles.loading ? (
-          <Loader />
-        ) : (
-          <Button variant="contained" color="primary" type="submit">
-            <span>Edit article</span>
-          </Button>
-        )}
-      </form>
+          <Divider className="mt-3 mb-3" />
+          <>
+            <FormControl fullWidth>
+              <InputLabel>Select a Category</InputLabel>
+              <Select
+                label="Select a Category"
+                {...formik.getFieldProps("category")}
+                error={
+                  formik.errors.category && formik.touched.category
+                    ? true
+                    : false
+                }
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {articles.categories
+                  ? articles.categories.map((category) => (
+                      <MenuItem key={category._id} value={category._id}>
+                        {category.name}
+                      </MenuItem>
+                    ))
+                  : null}
+              </Select>
+              {formik.errors.category && formik.touched.category ? (
+                <FormHelperText error>{formik.errors.category}</FormHelperText>
+              ) : null}
+            </FormControl>
+          </>
+          <Divider className="mt-3 mb-3" />
+          {articles.loading ? (
+            <Loader />
+          ) : (
+            <Button variant="contained" color="primary" type="submit">
+              <span>Edit article</span>
+            </Button>
+          )}
+        </form>
+      )}
     </>
   );
 };
